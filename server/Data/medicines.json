@@ -1,0 +1,29 @@
+[
+  {
+    "Id": "11111111-1111-1111-1111-111111111111",
+    "FullName": "Paracetamol 500mg",
+    "Notes": "General fever and pain relief",
+    "ExpiryDate": "2026-07-10T00:00:00",
+    "Quantity": 0,
+    "Price": 2.50,
+    "Brand": "Crocin"
+  },
+  {
+    "Id": "22222222-2222-2222-2222-222222222222",
+    "FullName": "Amoxicillin 250mg",
+    "Notes": "Antibiotic, prescription only",
+    "ExpiryDate": "2027-01-15T00:00:00",
+    "Quantity": 29,
+    "Price": 8.99,
+    "Brand": "Mox"
+  },
+  {
+    "Id": "33333333-3333-3333-3333-333333333333",
+    "FullName": "Cetirizine 10mg",
+    "Notes": "Antihistamine for allergies",
+    "ExpiryDate": "2026-12-01T00:00:00",
+    "Quantity": 3,
+    "Price": 1.20,
+    "Brand": "Zyrtec"
+  }
+]

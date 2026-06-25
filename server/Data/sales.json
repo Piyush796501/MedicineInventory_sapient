@@ -1,0 +1,146 @@
+[
+  {
+    "Id": "69cfc8d9-4b58-4279-9638-aae4f6309647",
+    "MedicineId": "11111111-1111-1111-1111-111111111111",
+    "MedicineName": "Paracetamol 500mg",
+    "Quantity": 1,
+    "UnitPrice": 2.50,
+    "TotalPrice": 2.50,
+    "SoldAt": "2026-06-24T18:59:16.0314874Z"
+  },
+  {
+    "Id": "09e544df-03a8-466d-a6dc-732ac13d8b74",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-24T18:59:16.6368637Z"
+  },
+  {
+    "Id": "b1314e20-a7c1-408c-a8b4-d6628d41731a",
+    "MedicineId": "11111111-1111-1111-1111-111111111111",
+    "MedicineName": "Paracetamol 500mg",
+    "Quantity": 1,
+    "UnitPrice": 2.50,
+    "TotalPrice": 2.50,
+    "SoldAt": "2026-06-25T19:32:59.6332307Z"
+  },
+  {
+    "Id": "81972e31-5393-4111-8adc-6012d7700691",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:33:41.8058343Z"
+  },
+  {
+    "Id": "9f872a2a-fac5-494d-b2b1-6b710ba8c74d",
+    "MedicineId": "11111111-1111-1111-1111-111111111111",
+    "MedicineName": "Paracetamol 500mg",
+    "Quantity": 1,
+    "UnitPrice": 2.50,
+    "TotalPrice": 2.50,
+    "SoldAt": "2026-06-25T19:34:47.1303284Z"
+  },
+  {
+    "Id": "930b0956-de19-4f3a-a837-f2aa1e82e8bd",
+    "MedicineId": "11111111-1111-1111-1111-111111111111",
+    "MedicineName": "Paracetamol 500mg",
+    "Quantity": 1,
+    "UnitPrice": 2.50,
+    "TotalPrice": 2.50,
+    "SoldAt": "2026-06-25T19:34:48.4713966Z"
+  },
+  {
+    "Id": "1eaaec87-2f3c-49a0-9b3f-9770ad0d628b",
+    "MedicineId": "11111111-1111-1111-1111-111111111111",
+    "MedicineName": "Paracetamol 500mg",
+    "Quantity": 1,
+    "UnitPrice": 2.50,
+    "TotalPrice": 2.50,
+    "SoldAt": "2026-06-25T19:34:50.0411831Z"
+  },
+  {
+    "Id": "f5ec0d10-bdc3-408d-93fd-c4d2749be0d0",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:53.1509077Z"
+  },
+  {
+    "Id": "666065c7-12fe-4716-b3c4-7eca1dc0b777",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:53.6102455Z"
+  },
+  {
+    "Id": "f7ff8291-2782-49bd-96a9-2567db69017f",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:53.8720338Z"
+  },
+  {
+    "Id": "821af642-f733-4ad7-8221-431d88e6abd1",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:54.1170462Z"
+  },
+  {
+    "Id": "3657f05d-b552-4079-8eaf-b8519ec75644",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:54.3899638Z"
+  },
+  {
+    "Id": "3d4f8896-e208-40fd-b043-a60a9efe16bd",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:54.6443378Z"
+  },
+  {
+    "Id": "44a6572a-b25a-4014-bff9-274cd11fb2df",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:54.8824693Z"
+  },
+  {
+    "Id": "34add503-da87-4596-b591-301421f10ad6",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:55.219706Z"
+  },
+  {
+    "Id": "94c1dc51-d67c-45f9-a806-e20daa919675",
+    "MedicineId": "22222222-2222-2222-2222-222222222222",
+    "MedicineName": "Amoxicillin 250mg",
+    "Quantity": 1,
+    "UnitPrice": 8.99,
+    "TotalPrice": 8.99,
+    "SoldAt": "2026-06-25T19:34:55.5656605Z"
+  }
+]

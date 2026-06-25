@@ -1,0 +1,20 @@
+.app { max-width: 1000px; margin: 0 auto; padding: 24px; }
+h1 { margin: 0 0 4px; font-size: 28px; }
+.sub { color: #666; margin-bottom: 20px; }
+.card { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+label { display: flex; flex-direction: column; font-size: 13px; color: #444; gap: 4px; }
+input { padding: 8px 10px; border: 1px solid #ccd2d9; border-radius: 6px; font-size: 14px; }
+button { padding: 8px 14px; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; font-size: 14px; }
+button.secondary { background: #6b7280; }
+button:hover { opacity: .92; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef0f3; font-size: 14px; }
+th { background: #f0f2f5; font-weight: 600; }
+tr.expiring  { background: #f8d7da; }   /* red: expiry < 30 days */
+tr.low-stock { background: #fff3cd; }   /* yellow: quantity < 10 */
+.legend span { display: inline-block; margin-right: 16px; font-size: 13px; }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+.err { color: #b91c1c; font-size: 13px; margin-top: 8px; }
+.qty-input { width: 56px; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicine Inventory</title>
+  <style>
+    body { font-family: system-ui, Segoe UI, Arial, sans-serif; margin: 0; background: #f5f6f8; color: #1a1a1a; }
+    .app { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    h1 { margin: 0 0 4px; }
+    .sub { color: #666; margin-bottom: 20px; }
+    .card { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+    .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+    label { display: flex; flex-direction: column; font-size: 13px; color: #444; gap: 4px; }
+    input { padding: 8px 10px; border: 1px solid #ccd2d9; border-radius: 6px; font-size: 14px; }
+    button { padding: 8px 14px; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; font-size: 14px; }
+    button.secondary { background: #6b7280; }
+    button:hover { opacity: .92; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef0f3; font-size: 14px; }
+    th { background: #f0f2f5; font-weight: 600; }
+    tr.expiring  { background: #f8d7da; }   /* red: expiry < 30 days */
+    tr.low-stock { background: #fff3cd; }   /* yellow: quantity < 10 */
+    .legend span { display: inline-block; margin-right: 16px; font-size: 13px; }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+    .err { color: #b91c1c; font-size: 13px; margin-top: 8px; }
+    .qty-input { width: 56px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Medicine Inventory</h1>
+    <div class="sub">ABC Pharmacy — stock &amp; sales</div>
+
+    <div class="toolbar">
+      <div>
+        <button id="tabInventory">Inventory</button>
+        <button id="tabSales" class="secondary" style="margin-left:8px">Sales History</button>
+      </div>
+      <div id="searchBar">
+        <input id="search" placeholder="Search by name…" />
+        <button id="searchBtn" style="margin-left:6px">Search</button>
+        <button id="clearBtn" class="secondary" style="margin-left:6px">Clear</button>
+      </div>
+    </div>
+
+    <div id="error" class="err"></div>
+
+    <!-- Inventory view -->
+    <div id="inventoryView">
+      <form id="addForm" class="card">
+        <h3 style="margin-top:0">Add Medicine</h3>
+        <div class="row">
+          <label>Full Name<input id="f_name" /></label>
+          <label>Brand<input id="f_brand" /></label>
+          <label>Expiry Date<input id="f_expiry" type="date" /></label>
+          <label>Quantity<input id="f_qty" type="number" min="0" /></label>
+          <label>Price<input id="f_price" type="number" min="0" step="0.01" /></label>
+          <label style="flex:1;min-width:180px">Notes<input id="f_notes" /></label>
+          <button type="submit">Add</button>
+        </div>
+        <div id="addErr" class="err"></div>
+      </form>
+
+      <div class="card">
+        <div class="legend">
+          <span><span class="swatch" style="background:#f8d7da"></span>Expiring within 30 days</span>
+          <span><span class="swatch" style="background:#fff3cd"></span>Low stock (&lt; 10)</span>
+        </div>
+        <div id="gridContainer"></div>
+      </div>
+    </div>
+
+    <!-- Sales view -->
+    <div id="salesView" class="hidden">
+      <div class="card"><div id="salesContainer"></div></div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Change this if your API runs on a different port ----
+    const API = "http://localhost:5067/api";
+
+    // ---- Business rule: row color ----
+    const MS_PER_DAY = 86400000;
+    function daysUntil(dateStr) {
+      return Math.ceil((new Date(dateStr) - new Date()) / MS_PER_DAY);
+    }
+    function rowStatus(m) {
+      if (daysUntil(m.expiryDate) < 30) return "expiring";  // red wins
+      if (m.quantity < 10) return "low-stock";              // yellow
+      return "";
+    }
+
+    // ---- small helpers ----
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c =>
+      ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+    const money = (n) => Number(n).toFixed(2);
+
+    // ---- API ----
+    const api = {
+      list: (search = "") =>
+        fetch(`${API}/medicines${search ? `?search=${encodeURIComponent(search)}` : ""}`).then(r => r.json()),
+      add: (m) => fetch(`${API}/medicines`, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(m) }),
+      sell: (id, quantity) => fetch(`${API}/medicines/${id}/sell`, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ quantity }) }),
+      sales: () => fetch(`${API}/sales`).then(r => r.json()),
+    };
+
+    // ---- Inventory rendering ----
+    async function loadInventory(search) {
+      const q = search !== undefined ? search : $("search").value;
+      try {
+        const meds = await api.list(q);
+        $("error").textContent = "";
+        renderGrid(meds);
+      } catch {
+        $("error").textContent = "Cannot reach the API. Is the backend running on " + API + " ?";
+      }
+    }
+
+    function renderGrid(meds) {
+      const c = $("gridContainer");
+      if (!meds.length) { c.innerHTML = "<p>No medicines found.</p>"; return; }
+      let rows = meds.map(m => `
+        <tr class="${rowStatus(m)}">
+          <td>${esc(m.fullName)}</td>
+          <td>${new Date(m.expiryDate).toLocaleDateString()}</td>
+          <td>${m.quantity}</td>
+          <td>${money(m.price)}</td>
+          <td>${esc(m.brand)}</td>
+          <td>
+            <input class="qty-input" type="number" min="1" value="1" id="qty_${m.id}" />
+            <button style="margin-left:6px" data-sell="${m.id}">Sell</button>
+          </td>
+        </tr>`).join("");
+      c.innerHTML = `
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Expiry Date</th><th>Quantity</th><th>Price</th><th>Brand</th><th>Sell</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+      c.querySelectorAll("[data-sell]").forEach(btn =>
+        btn.addEventListener("click", () => handleSell(btn.getAttribute("data-sell"))));
+    }
+
+    async function handleSell(id) {
+      const qty = Number($("qty_" + id).value);
+      const res = await api.sell(id, qty);
+      if (!res.ok) { alert(await res.text()); return; }
+      loadInventory();
+    }
+
+    // ---- Add form ----
+    $("addForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = $("addErr"); err.textContent = "";
+      const name = $("f_name").value.trim();
+      const qty = $("f_qty").value, price = $("f_price").value, expiry = $("f_expiry").value;
+      if (!name) return err.textContent = "Name is required.";
+      if (qty === "" || Number(qty) < 0) return err.textContent = "Quantity must be 0 or more.";
+      if (price === "" || Number(price) < 0) return err.textContent = "Price must be 0 or more.";
+      if (!expiry) return err.textContent = "Expiry date is required.";
+
+      const res = await api.add({
+        fullName: name, notes: $("f_notes").value, expiryDate: expiry,
+        quantity: Number(qty), price: Number(price), brand: $("f_brand").value,
+      });
+      if (!res.ok) return err.textContent = await res.text();
+      ["f_name","f_brand","f_expiry","f_qty","f_price","f_notes"].forEach(i => $(i).value = "");
+      loadInventory("");
+    });
+
+    // ---- Sales rendering ----
+    async function loadSales() {
+      try {
+        const sales = await api.sales();
+        const c = $("salesContainer");
+        if (!sales.length) { c.innerHTML = "<p>No sales recorded yet.</p>"; return; }
+        const rows = sales.map(s => `
+          <tr>
+            <td>${esc(s.medicineName)}</td>
+            <td>${s.quantity}</td>
+            <td>${money(s.unitPrice)}</td>
+            <td>${money(s.totalPrice)}</td>
+            <td>${new Date(s.soldAt).toLocaleString()}</td>
+          </tr>`).join("");
+        c.innerHTML = `
+          <table>
+            <thead><tr><th>Medicine</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Sold At</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+      } catch {
+        $("salesContainer").innerHTML = "<p class='err'>Cannot reach the API.</p>";
+      }
+    }
+
+    // ---- Tab switching ----
+    function showInventory() {
+      $("inventoryView").classList.remove("hidden");
+      $("salesView").classList.add("hidden");
+      $("searchBar").classList.remove("hidden");
+      $("tabInventory").className = "";
+      $("tabSales").className = "secondary";
+      loadInventory();
+    }
+    function showSales() {
+      $("inventoryView").classList.add("hidden");
+      $("salesView").classList.remove("hidden");
+      $("searchBar").classList.add("hidden");
+      $("tabInventory").className = "secondary";
+      $("tabSales").className = "";
+      loadSales();
+    }
+
+    // ---- wire up ----
+    $("tabInventory").addEventListener("click", showInventory);
+    $("tabSales").addEventListener("click", showSales);
+    $("searchBtn").addEventListener("click", () => loadInventory());
+    $("clearBtn").addEventListener("click", () => { $("search").value = ""; loadInventory(""); });
+    $("search").addEventListener("keydown", (e) => { if (e.key === "Enter") loadInventory(); });
+
+    // initial load
+    loadInventory("");
+  </script>
+</body>
+</html>
